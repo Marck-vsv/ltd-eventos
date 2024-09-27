@@ -36,6 +36,7 @@ public class UserUseCases implements IUserUseCases {
             throw new RuntimeException(e);
         }
         return userDomain;
+        //teste :)
     }
 
     @Override
