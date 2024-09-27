@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
-@Setter
 @ToString
 public class UserBusinessRules {
     private String user_id;

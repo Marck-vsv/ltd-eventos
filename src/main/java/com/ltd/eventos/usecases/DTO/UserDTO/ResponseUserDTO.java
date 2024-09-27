@@ -6,12 +6,14 @@ import com.ltd.eventos.shared.UserType;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ResponseUserDTO(String username,
-                              String matricula,
-                              UserType user_type,
-                              LocalDateTime created_at,
-                              LocalDateTime updated_at,
-                              String evento_evento_id) {
+public record ResponseUserDTO(
+        String username,
+        String matricula,
+        UserType user_type,
+        LocalDateTime created_at,
+        LocalDateTime updated_at,
+        String evento_evento_id
+) {
     public ResponseUserDTO(UserDomain userDomain) {
         this (
                 userDomain.getUsername(),

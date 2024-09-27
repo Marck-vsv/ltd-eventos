@@ -6,7 +6,6 @@ import com.ltd.eventos.usecases.DTO.UserDTO.UpdateUserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 // Lombok
 @Data

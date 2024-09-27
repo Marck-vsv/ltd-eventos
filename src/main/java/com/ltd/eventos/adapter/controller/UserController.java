@@ -11,35 +11,40 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.HandlerMapping;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
     private final UserUseCases userUseCases;
-    private final HandlerMapping resourceHandlerMapping;
 
     @Autowired
-    public UserController(UserUseCases userUseCases, @Qualifier("resourceHandlerMapping") HandlerMapping resourceHandlerMapping) {
+    public UserController(UserUseCases userUseCases) {
         this.userUseCases = userUseCases;
-        this.resourceHandlerMapping = resourceHandlerMapping;
     }
 
     @PostMapping("/create")
     public ResponseEntity<UserDomain> createUser(@RequestBody UserBusinessRules user) {
-        return ResponseEntity.ok(userUseCases.CreateUser(user));
+        return ResponseEntity.ok(userUseCases.createUser(user));
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable String id) {
-        return ResponseEntity.ok("Usuário " + userUseCases.DeleteUser(id) + " deletado com sucesso!");
+        return ResponseEntity.ok(userUseCases.deleteUser(id));
     }
 
     @PatchMapping("/update")
     public ResponseEntity<UserDomain> updateUser(@RequestBody UpdateUserDTO user) {
-        return ResponseEntity.ok(userUseCases.UpdateUser(user));
+        return ResponseEntity.ok(userUseCases.updateUser(user));
     }
 
     @GetMapping("/finduserbymatricula/{matricula}")
     public ResponseEntity<ResponseUserDTO> findUserByMatricula(@PathVariable String matricula) {
-        return ResponseEntity.ok(userUseCases.FindByMatricula(matricula));
+        return ResponseEntity.ok(userUseCases.findByMatricula(matricula));
+    }
+
+    @GetMapping("/findallusers")
+    public ResponseEntity<List<ResponseUserDTO>> findAllUsers() {
+        return ResponseEntity.ok(userUseCases.findAll());
     }
 }

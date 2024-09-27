@@ -5,12 +5,18 @@ import com.ltd.eventos.infrastructure.db.entities.UserDomain;
 import com.ltd.eventos.infrastructure.db.repository.UserRepository;
 import com.ltd.eventos.usecases.DTO.UserDTO.ResponseUserDTO;
 import com.ltd.eventos.usecases.DTO.UserDTO.UpdateUserDTO;
+import com.ltd.eventos.usecases.exceptions.UsuarioNaoExiste;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-@Component
+@Service
 public class UserUseCases implements IUserUseCases {
     private final UserRepository userRepository;
 
@@ -20,47 +26,73 @@ public class UserUseCases implements IUserUseCases {
     }
 
     @Override
-    public UserDomain CreateUser(UserBusinessRules user) {
+    @Transactional
+    public UserDomain createUser(UserBusinessRules user) throws RuntimeException {
         UserDomain userDomain = new UserDomain(user);
         userDomain.setCreated_at(LocalDateTime.now());
-        userRepository.save(userDomain);
+        try {
+            userRepository.save(userDomain);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return userDomain;
     }
 
     @Override
-    public String DeleteUser(String id) {
+    @Transactional
+    public String deleteUser(String id) throws UsuarioNaoExiste {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
         } else {
-            throw new IllegalArgumentException("Usuario com o ID: " + id + " não encontrado.");
+            throw new UsuarioNaoExiste("Usuario com o ID: " + id + " não encontrado.");
         }
         return id;
     }
 
     @Override
-    public UserDomain UpdateUser(UpdateUserDTO user) {
-        UserDomain userDomain = userRepository.findByUsername(user.username());
-
-        if (userDomain.getUsername() != null) {
-            userDomain.setUsername(user.usernameNovo());
+    @Transactional
+    public Optional<UserDomain> updateUser(UpdateUserDTO user) throws UsuarioNaoExiste, IllegalArgumentException {
+        if (user.username()  == null) {
+            throw new IllegalArgumentException("Username de usuário não pode estar vazio.");
         }
-        if (userDomain.getSenha() != null) {
-            userDomain.setSenha(user.senha());
+        Optional<UserDomain> userDomain = Optional.ofNullable(userRepository.findByUsername(user.username()));
+
+        if (userDomain.isEmpty()) {
+            throw new UsuarioNaoExiste("Usuário com username: " + user + " não existe no banco de dados.");
         }
 
-        userDomain.setUpdated_at(LocalDateTime.now());
-        userRepository.save(userDomain);
+        if (user.usernameNovo() != null) {
+            userDomain.get().setUsername(user.usernameNovo());
+        }
+
+        if (user.senha() != null) {
+            userDomain.get().setSenha(user.senha());
+        }
+        userDomain.get().setUpdated_at(LocalDateTime.now());
+        userRepository.save(userDomain.get());
         return userDomain;
     }
 
     @Override
-    public ResponseUserDTO FindByMatricula(String matricula) {
-        UserDomain user = userRepository.findByMatricula(matricula);
-        return new ResponseUserDTO(user.getUsername(),user.getMatricula(),user.getUser_type(),user.getCreated_at(),user.getUpdated_at(),user.getEvento_evento_id());
+    public Optional<ResponseUserDTO> findByMatricula(String matricula) throws UsuarioNaoExiste {
+        Optional<UserDomain> user = Optional.ofNullable(userRepository.findByMatricula(matricula));
+        if (user.isEmpty()) {
+            throw new UsuarioNaoExiste("Usuário não existe no banco de dados.");
+        }
+        return Optional.of(new ResponseUserDTO(
+                user.get().getUsername(),
+                user.get().getMatricula(),
+                user.get().getUser_type(),
+                user.get().getCreated_at(),
+                user.get().getUpdated_at(),
+                user.get().getEvento_evento_id()
+        ));
     }
 
     @Override
-    public List<ResponseUserDTO> FindAll() {
-        return userRepository.findAll();
+    public List<ResponseUserDTO> findAll() {
+        Iterable<UserDomain> usersIterable = userRepository.findAll();
+
+        return StreamSupport.stream(usersIterable.spliterator(), true).map(ResponseUserDTO::new).collect(Collectors.toList());
     }
 }

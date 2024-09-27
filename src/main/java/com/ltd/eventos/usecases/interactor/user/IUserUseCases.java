@@ -6,11 +6,12 @@ import com.ltd.eventos.usecases.DTO.UserDTO.ResponseUserDTO;
 import com.ltd.eventos.usecases.DTO.UserDTO.UpdateUserDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUserUseCases {
-    public UserDomain CreateUser (UserBusinessRules user);
-    public String DeleteUser (String id);
-    public UserDomain UpdateUser (UpdateUserDTO user);
-    ResponseUserDTO FindByMatricula(String matricula);
-    public List<ResponseUserDTO> FindAll ();
+    public UserDomain createUser (UserBusinessRules user);
+    public String deleteUser (String id);
+    public Optional<UserDomain> updateUser (UpdateUserDTO user);
+    Optional<ResponseUserDTO> findByMatricula(String matricula);
+    public List<ResponseUserDTO> findAll ();
 }
