@@ -1,19 +1,17 @@
 package com.ltd.eventos.adapter.controller;
 
-import com.ltd.eventos.domain.entities.user.UserBusinessRules;
-import com.ltd.eventos.infrastructure.db.entities.UserDomain;
+import com.ltd.eventos.usecases.DTO.UserDTO.CreateUserDTO;
 import com.ltd.eventos.usecases.DTO.UserDTO.ResponseUserDTO;
 import com.ltd.eventos.usecases.DTO.UserDTO.UpdateUserDTO;
 import com.ltd.eventos.usecases.exceptions.UsuarioNaoExiste;
 import com.ltd.eventos.usecases.interactor.user.UserUseCases;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.HandlerMapping;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -26,7 +24,7 @@ public class UserController {
   }
 
   @PostMapping("/create")
-  public ResponseEntity<?> createUser(@RequestBody UserBusinessRules user) {
+  public ResponseEntity<?> createUser(@RequestBody CreateUserDTO user) {
     try {
       return ResponseEntity.ok(userUseCases.createUser(user));
     } catch (RuntimeException e) {

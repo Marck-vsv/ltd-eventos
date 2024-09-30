@@ -6,6 +6,7 @@ import com.ltd.eventos.usecases.DTO.UserDTO.UpdateUserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 // Lombok
 @Data
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @Table(name = "user")
 public class UserDomain {
     @Id
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, columnDefinition = "VARCHAR(36)")
     private String user_id;
     @Column(nullable = false)
     private String username;
@@ -37,7 +38,7 @@ public class UserDomain {
     private String evento_evento_id;
 
     public UserDomain(UserBusinessRules userBusinessRules) {
-        this.user_id = userBusinessRules.getUser_id();
+        this.user_id = userBusinessRules.getUser_id().toString();
         this.username = userBusinessRules.getUsername();
         this.matricula = userBusinessRules.getMatricula();
         this.senha = userBusinessRules.getSenha();
