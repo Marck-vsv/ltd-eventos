@@ -58,7 +58,7 @@ public class UserUseCases implements IUserUseCases {
         Optional<UserDomain> userDomain = Optional.ofNullable(userRepository.findByUsername(user.username()));
 
         if (userDomain.isEmpty()) {
-            throw new UsuarioNaoExiste("Usuário com username: " + user + " não existe no banco de dados.");
+            throw new UsuarioNaoExiste("Usuário com username: " + user.username() + " não existe no banco de dados.");
         }
 
         if (user.usernameNovo() != null) {
