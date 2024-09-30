@@ -7,7 +7,7 @@ import com.ltd.eventos.usecases.DTO.LocalDTO.ResponseLocalDTO;
 import java.util.List;
 
 public interface ILocalUseCases {
-    public LocalDomain createLocal (LocalBusinessRules local);
-    public String deleteLocal (String id);
-    public List<ResponseLocalDTO> findAll ();
+    LocalDomain createLocal(LocalBusinessRules local);
+    String deleteLocal(String id);
+    List<ResponseLocalDTO> findAll();
 }
