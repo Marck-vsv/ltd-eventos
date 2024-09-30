@@ -1,12 +1,11 @@
 package com.ltd.eventos.infrastructure.db.entities;
 
-import com.ltd.eventos.domain.entities.user.UserBusinessRules;
+import com.ltd.eventos.domain.entities.UserBusinessRules;
 import com.ltd.eventos.shared.UserType;
 import com.ltd.eventos.usecases.DTO.UserDTO.UpdateUserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 // Lombok
 @Data

@@ -1,4 +1,4 @@
-package com.ltd.eventos.domain.entities.user;
+package com.ltd.eventos.domain.entities;
 
 import com.ltd.eventos.shared.UserType;
 import com.ltd.eventos.usecases.DTO.UserDTO.CreateUserDTO;

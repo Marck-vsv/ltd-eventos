@@ -7,7 +7,6 @@ import com.ltd.eventos.usecases.DTO.UserDTO.UpdateUserDTO;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface IUserUseCases {
     UserDomain createUser(CreateUserDTO user);
