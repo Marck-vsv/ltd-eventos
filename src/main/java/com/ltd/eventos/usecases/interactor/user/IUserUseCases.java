@@ -10,9 +10,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IUserUseCases {
-    public UserDomain createUser (CreateUserDTO user);
-    public String deleteUser (String id);
-    public Optional<UserDomain> updateUser (UpdateUserDTO user);
+    UserDomain createUser(CreateUserDTO user);
+    String deleteUser(String id);
+    Optional<UserDomain> updateUser(UpdateUserDTO user);
     Optional<ResponseUserDTO> findByMatricula(String matricula);
-    public List<ResponseUserDTO> findAll ();
+    List<ResponseUserDTO> findAll();
 }

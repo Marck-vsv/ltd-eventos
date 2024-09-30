@@ -1,6 +1,5 @@
 package com.ltd.eventos.domain.entities.eventos;
 
-import com.ltd.eventos.domain.entities.local.LocalBusinessRules;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;

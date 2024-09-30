@@ -1,7 +1,9 @@
 package com.ltd.eventos.domain.entities.local;
 
 import com.ltd.eventos.shared.LocalType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
