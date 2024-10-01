@@ -6,7 +6,6 @@ import com.ltd.eventos.infrastructure.db.repository.LocalRepository;
 import com.ltd.eventos.usecases.DTO.LocalDTO.CreateLocalDTO;
 import com.ltd.eventos.usecases.DTO.LocalDTO.ResponseLocalDTO;
 import com.ltd.eventos.usecases.DTO.LocalDTO.UpdateLocalDTO;
-import com.ltd.eventos.usecases.DTO.UserDTO.ResponseUserDTO;
 import com.ltd.eventos.usecases.exceptions.LocalNaoExiste;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,18 +25,22 @@ public class LocalUseCases implements ILocalUseCases {
   }
 
   @Override
-  public LocalDomain createLocal(CreateLocalDTO local) {
-    LocalDomain localDomain = new LocalDomain(new LocalBusinessRules(local));
-    localRepository.save(localDomain);
-    return localDomain;
+  public LocalDomain createLocal(CreateLocalDTO local) throws RuntimeException {
+    try {
+      LocalDomain localDomain = new LocalDomain(new LocalBusinessRules(local));
+      localRepository.save(localDomain);
+          return localDomain;
+    } catch (RuntimeException e) {
+      throw new RuntimeException("Erro ao cadastrar local. Stacktrace: " + e);
+    }
   }
 
   @Override
-  public String deleteLocal(String id) throws IllegalArgumentException {
+  public String deleteLocal(String id) throws LocalNaoExiste {
     if (localRepository.existsById(id)) {
       localRepository.deleteById(id);
     } else {
-      throw new IllegalArgumentException("Local com o ID: " + id + " não encontrado.");
+      throw new LocalNaoExiste("Local com o ID: " + id + " não encontrado.");
     }
     return id;
   }
@@ -45,6 +48,7 @@ public class LocalUseCases implements ILocalUseCases {
   @Override
   public LocalDomain updateLocal(UpdateLocalDTO user) throws LocalNaoExiste {
     Optional<LocalDomain> localDomain = localRepository.findById(user.localID());
+
     if (localDomain.isPresent()) {
       if (user.localCapacidade() != null) {
         localDomain.get().setLocal_capacidade(user.localCapacidade());
@@ -63,7 +67,7 @@ public class LocalUseCases implements ILocalUseCases {
   }
 
   @Override
-  public ResponseLocalDTO findById(String id) {
+  public ResponseLocalDTO findById(String id) throws LocalNaoExiste {
     Optional<LocalDomain> localDomain = localRepository.findById(id);
     if (localDomain.isEmpty()) {
       throw new LocalNaoExiste("Local nao existe.");
