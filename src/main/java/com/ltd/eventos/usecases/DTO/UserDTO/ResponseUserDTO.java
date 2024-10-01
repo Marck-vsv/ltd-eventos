@@ -4,7 +4,6 @@ import com.ltd.eventos.infrastructure.db.entities.UserDomain;
 import com.ltd.eventos.shared.UserType;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public record ResponseUserDTO(
         String username,
