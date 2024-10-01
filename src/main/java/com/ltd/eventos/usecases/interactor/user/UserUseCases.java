@@ -1,6 +1,6 @@
 package com.ltd.eventos.usecases.interactor.user;
 
-import com.ltd.eventos.domain.entities.user.UserBusinessRules;
+import com.ltd.eventos.domain.entities.UserBusinessRules;
 import com.ltd.eventos.infrastructure.db.entities.UserDomain;
 import com.ltd.eventos.infrastructure.db.repository.UserRepository;
 import com.ltd.eventos.usecases.DTO.UserDTO.CreateUserDTO;

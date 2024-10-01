@@ -1,6 +1,6 @@
 package com.ltd.eventos.infrastructure.db.entities;
 
-import com.ltd.eventos.domain.entities.eventos.EventosBusinessRules;
+import com.ltd.eventos.domain.entities.EventosBusinessRules;
 import jakarta.persistence.*;
 import lombok.*;
 

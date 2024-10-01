@@ -1,4 +1,4 @@
-package com.ltd.eventos.domain.entities.eventos;
+package com.ltd.eventos.domain.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
