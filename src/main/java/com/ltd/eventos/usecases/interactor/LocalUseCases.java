@@ -26,7 +26,7 @@ public class LocalUseCases {
     try {
       LocalDomain localDomain = new LocalDomain(new LocalBusinessRules(local));
       localRepository.save(localDomain);
-          return localDomain;
+      return localDomain;
     } catch (RuntimeException e) {
       throw new RuntimeException("Erro ao cadastrar local. Stacktrace: " + e);
     }
@@ -61,7 +61,7 @@ public class LocalUseCases {
     return localDomain.get();
   }
 
-  public LocalDomain  findById(String id) throws LocalNaoExiste {
+  public LocalDomain findById(String id) throws LocalNaoExiste {
     Optional<LocalDomain> localDomain = localRepository.findById(id);
     if (localDomain.isEmpty()) {
       throw new LocalNaoExiste("Local nao existe.");
@@ -71,5 +71,9 @@ public class LocalUseCases {
 
   public List<LocalDomain> findAll() {
     return StreamSupport.stream(localRepository.findAll().spliterator(), true).collect(Collectors.toList());
+  }
+
+  public boolean existById(String id) {
+    return localRepository.existsById(id);
   }
 }

@@ -48,7 +48,7 @@ public class UserUseCases {
   }
 
   @Transactional
-  public Optional<UserDomain> updateUser(UpdateUserDTO user) throws UsuarioNaoExiste, IllegalArgumentException {
+  public UserDomain updateUser(UpdateUserDTO user) throws UsuarioNaoExiste, IllegalArgumentException {
     if (user.username() == null) {
       throw new IllegalArgumentException("Username de usuário não pode estar vazio.");
     }
@@ -67,15 +67,15 @@ public class UserUseCases {
     }
     userDomain.get().setUpdated_at(LocalDateTime.now());
     userRepository.save(userDomain.get());
-    return userDomain;
+    return userDomain.get();
   }
 
-  public Optional<UserDomain> findByMatricula(String matricula) throws UsuarioNaoExiste {
+  public UserDomain findByMatricula(String matricula) throws UsuarioNaoExiste {
     Optional<UserDomain> user = Optional.ofNullable(userRepository.findByMatricula(matricula));
     if (user.isEmpty()) {
       throw new UsuarioNaoExiste("Usuário não existe no banco de dados.");
     }
-    return user;
+    return user.get();
   }
 
   public List<ResponseUserDTO> findAll() {

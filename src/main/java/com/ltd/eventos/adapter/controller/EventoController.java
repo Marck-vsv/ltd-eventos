@@ -3,8 +3,11 @@ package com.ltd.eventos.adapter.controller;
 import com.ltd.eventos.adapter.DTO.eventoDTO.CreateEventoDTO;
 import com.ltd.eventos.adapter.DTO.eventoDTO.ResponseEventoDTO;
 import com.ltd.eventos.adapter.DTO.eventoDTO.UpdateEventoDTO;
+import com.ltd.eventos.usecases.exceptions.EventoNaoExiste;
+import com.ltd.eventos.usecases.exceptions.LocalNaoExiste;
 import com.ltd.eventos.usecases.interactor.EventoUseCases;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,26 +26,46 @@ public class EventoController {
   }
 
   @PostMapping("/create")
-  public ResponseEntity<ResponseEventoDTO> criarEvento(@RequestBody CreateEventoDTO createEventoDTO) {
-    return ResponseEntity.ok(new ResponseEventoDTO(eventoUseCases.createEvento(createEventoDTO)));
+  public ResponseEntity<?> criarEvento(@RequestBody CreateEventoDTO createEventoDTO) {
+    try {
+      return ResponseEntity.ok(new ResponseEventoDTO(eventoUseCases.createEvento(createEventoDTO)));
+    } catch (LocalNaoExiste e) {
+      return ResponseEntity.badRequest().body("Erro no processamento da requisicao: " + e.getMessage());
+    } catch (RuntimeException e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar evento. Stacktrace de erro: " + e.getMessage());
+    }
   }
 
   @PatchMapping("/update")
-  public ResponseEntity<ResponseEventoDTO> updateEvento(@RequestBody UpdateEventoDTO updateEventoDTO) {
-    return ResponseEntity.ok(new ResponseEventoDTO(eventoUseCases.updateEvento(updateEventoDTO)));
+  public ResponseEntity<?> updateEvento(@RequestBody UpdateEventoDTO updateEventoDTO) {
+    try {
+      return ResponseEntity.ok(new ResponseEventoDTO(eventoUseCases.updateEvento(updateEventoDTO)));
+    } catch (LocalNaoExiste e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro no processamento da requisicao: " + e.getMessage());
+    } catch (EventoNaoExiste e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro no processamento da requisicao: " + e.getMessage());
+    }
   }
 
   @DeleteMapping("/delete/{id}")
   public ResponseEntity<String> deleteEvento(@PathVariable String id) {
-    return ResponseEntity.ok(eventoUseCases.deleteEvento(id));
+    try {
+      return ResponseEntity.ok(eventoUseCases.deleteEvento(id));
+    } catch (EventoNaoExiste e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro no processamento da requisicao: " + e.getMessage());
+    }
   }
 
   @GetMapping("/findbyid/{id}")
-  public ResponseEntity<ResponseEventoDTO> findEventoById(@PathVariable String id) {
-    return ResponseEntity.ok(new ResponseEventoDTO(eventoUseCases.findById(id).get()));
+  public ResponseEntity<?> findEventoById(@PathVariable String id) {
+    try {
+      return ResponseEntity.ok(new ResponseEventoDTO(eventoUseCases.findById(id)));
+    } catch (EventoNaoExiste e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro no processamento da requisicao: " + e.getMessage());
+    }
   }
 
-    @GetMapping("/findall")
+  @GetMapping("/findall")
   public ResponseEntity<List<ResponseEventoDTO>> findAll() {
     return ResponseEntity.ok(eventoUseCases.findall().stream().map(ResponseEventoDTO::new).collect(Collectors.toList()));
   }

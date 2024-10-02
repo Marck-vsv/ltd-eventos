@@ -43,7 +43,7 @@ public class UserController {
   @PatchMapping("/update")
   public ResponseEntity<?> updateUser(@RequestBody UpdateUserDTO user) {
     try {
-      return ResponseEntity.ok(new ResponseUserDTO(userUseCases.updateUser(user).get()));
+      return ResponseEntity.ok(new ResponseUserDTO(userUseCases.updateUser(user)));
     } catch (UsuarioNaoExiste e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     } catch (IllegalArgumentException e) {
@@ -54,7 +54,7 @@ public class UserController {
   @GetMapping("/finduserbymatricula/{matricula}")
   public ResponseEntity<?> findUserByMatricula(@PathVariable String matricula) {
     try {
-      return ResponseEntity.ok(new ResponseUserDTO(userUseCases.findByMatricula(matricula).get()));
+      return ResponseEntity.ok(new ResponseUserDTO(userUseCases.findByMatricula(matricula)));
     } catch (UsuarioNaoExiste e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
