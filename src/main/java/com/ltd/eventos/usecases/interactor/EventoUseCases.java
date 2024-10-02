@@ -6,6 +6,8 @@ import com.ltd.eventos.infrastructure.db.model.EventoDomain;
 import com.ltd.eventos.infrastructure.db.model.LocalDomain;
 import com.ltd.eventos.infrastructure.db.repository.EventoRepository;
 import com.ltd.eventos.adapter.DTO.eventoDTO.CreateEventoDTO;
+import com.ltd.eventos.usecases.exceptions.EventoNaoExiste;
+import com.ltd.eventos.usecases.exceptions.LocalNaoExiste;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,21 +29,31 @@ public class EventoUseCases {
     this.localUseCases = localUseCases;
   }
 
-  public EventoDomain createEvento(CreateEventoDTO createEventoDTO) {
-    // Consultar a localDomain no banco e salvar em uma entidade
-    LocalDomain localDomain = localUseCases.findById(createEventoDTO.local_id());
-    // criar uma entidade de evento business com o dto e o uuid do local
-    EventoBusinessRules eventoBusinessRules = new EventoBusinessRules(createEventoDTO, localDomain.getLocal_id());
-    // criar uma entidade de dominio de evento completa
-    EventoDomain eventoDomain = new EventoDomain(eventoBusinessRules, localDomain);
-    // salvar a entidade
-    eventoRepository.save(eventoDomain);
-    return eventoDomain;
+  public EventoDomain createEvento(CreateEventoDTO createEventoDTO) throws  RuntimeException {
+    try {
+      // Consultar a localDomain no banco e salvar em uma entidade
+      if (localUseCases.existById(createEventoDTO.local_id())) {
+        LocalDomain localDomain = localUseCases.findById(createEventoDTO.local_id());
+        // criar uma entidade de evento business com o dto e o uuid do local
+        EventoBusinessRules eventoBusinessRules = new EventoBusinessRules(createEventoDTO, localDomain.getLocal_id());
+        // criar uma entidade de dominio de evento completa
+        EventoDomain eventoDomain = new EventoDomain(eventoBusinessRules, localDomain);
+        // salvar a entidade
+        eventoRepository.save(eventoDomain);
+        return eventoDomain;
+      } else {
+        throw new LocalNaoExiste("Usuário não existe");
+      }
+    } catch (LocalNaoExiste e) {
+      throw new LocalNaoExiste(e.getMessage());
+    } catch (RuntimeException e) {
+      throw new RuntimeException(e.getMessage());
+    }
   }
 
-  public EventoDomain updateEvento(UpdateEventoDTO updateEventoDTO) throws RuntimeException {
-    Optional<EventoDomain> optionalEventoDomain = eventoRepository.findById(updateEventoDTO.evento_id());
+  public EventoDomain updateEvento(UpdateEventoDTO updateEventoDTO) throws LocalNaoExiste, EventoNaoExiste {
     try {
+      Optional<EventoDomain> optionalEventoDomain = eventoRepository.findById(updateEventoDTO.evento_id());
       if (optionalEventoDomain.isPresent()) {
         if (updateEventoDTO.evento_nome() != null) {
           optionalEventoDomain.get().setEvento_nome(updateEventoDTO.evento_nome());
@@ -66,28 +78,39 @@ public class EventoUseCases {
           optionalEventoDomain.get().setLocal_local_id(localUseCases.findById(updateEventoDTO.local_id()));
         }
       } else {
-        throw new RuntimeException("asd");
+        throw new EventoNaoExiste("Evento não existe no repositorio");
       }
       return eventoRepository.save(optionalEventoDomain.get());
-    } catch (RuntimeException e) {
-      throw new RuntimeException(e.getMessage());
+    } catch (EventoNaoExiste e) {
+      throw new EventoNaoExiste(e.getMessage());
+    } catch (LocalNaoExiste e) {
+      throw new LocalNaoExiste(e.getMessage());
     }
   }
 
-  public String deleteEvento(String evento_id) {
+  public String deleteEvento(String evento_id) throws EventoNaoExiste {
     if (eventoRepository.existsById(evento_id)) {
       eventoRepository.deleteById(evento_id);
     } else {
-      throw new RuntimeException("asd");
+      throw new EventoNaoExiste("Evento com id " + evento_id + " não existe.");
     }
     return evento_id;
   }
 
-  public Optional<EventoDomain> findById(String evento_id) {
-    return  eventoRepository.findById(evento_id);
+  public EventoDomain findById(String evento_id) throws EventoNaoExiste {
+    try {
+      Optional<EventoDomain> eventoDomain = eventoRepository.findById(evento_id);
+      if (eventoDomain.isPresent()) {
+        return eventoDomain.get();
+      } else {
+        throw new EventoNaoExiste("Evento nao existe no repositorio");
+      }
+    } catch (EventoNaoExiste e) {
+      throw new EventoNaoExiste(e.getMessage());
+    }
   }
 
-    public List<EventoDomain> findall() {
+  public List<EventoDomain> findall() {
     return StreamSupport.stream(eventoRepository.findAll().spliterator(), true).collect(Collectors.toList());
   }
 }
