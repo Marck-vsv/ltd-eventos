@@ -245,6 +245,126 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Evento",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"evento_id\": \"12345\",\r\n  \"evento_nome\": \"Tech Conference 2024\",\r\n  \"evento_desc\": \"A major conference on technology and innovation.\",\r\n  \"evento_capacidade\": 500,\r\n  \"evento_inicio\": \"2024-11-10T09:00:00\",\r\n  \"evento_fim\": \"2024-11-10T18:00:00\",\r\n  \"created_at\": \"2024-10-01T10:00:00\",\r\n  \"local_id\": \"2b07b2e7-70e7-4e62-a3bf-1bfa495f5558\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/evento/create",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"evento",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/evento/update",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"evento",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/evento/delete/93a53ee1-7697-4fa1-9182-2b3b898f25f8",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"evento",
+								"delete",
+								"93a53ee1-7697-4fa1-9182-2b3b898f25f8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Findbyid",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/evento/findbyid/cfe71d60-7123-475c-a682-14e4a24d8bf3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"evento",
+								"findbyid",
+								"cfe71d60-7123-475c-a682-14e4a24d8bf3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FindAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/evento/findall",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"evento",
+								"findall"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

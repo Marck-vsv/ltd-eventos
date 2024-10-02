@@ -1,11 +1,9 @@
-package com.ltd.eventos.usecases.interactor.local;
+package com.ltd.eventos.usecases.interactor;
 
 import com.ltd.eventos.domain.entities.LocalBusinessRules;
-import com.ltd.eventos.infrastructure.db.entities.LocalDomain;
+import com.ltd.eventos.infrastructure.db.model.LocalDomain;
 import com.ltd.eventos.infrastructure.db.repository.LocalRepository;
-import com.ltd.eventos.usecases.DTO.LocalDTO.CreateLocalDTO;
-import com.ltd.eventos.usecases.DTO.LocalDTO.ResponseLocalDTO;
-import com.ltd.eventos.usecases.DTO.LocalDTO.UpdateLocalDTO;
+import com.ltd.eventos.adapter.DTO.LocalDTO.RequestLocalDTO;
 import com.ltd.eventos.usecases.exceptions.LocalNaoExiste;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class LocalUseCases implements ILocalUseCases {
+public class LocalUseCases {
   private final LocalRepository localRepository;
 
   @Autowired
@@ -24,8 +22,7 @@ public class LocalUseCases implements ILocalUseCases {
     this.localRepository = localRepository;
   }
 
-  @Override
-  public LocalDomain createLocal(CreateLocalDTO local) throws RuntimeException {
+  public LocalDomain createLocal(RequestLocalDTO local) throws RuntimeException {
     try {
       LocalDomain localDomain = new LocalDomain(new LocalBusinessRules(local));
       localRepository.save(localDomain);
@@ -35,7 +32,6 @@ public class LocalUseCases implements ILocalUseCases {
     }
   }
 
-  @Override
   public String deleteLocal(String id) throws LocalNaoExiste {
     if (localRepository.existsById(id)) {
       localRepository.deleteById(id);
@@ -45,8 +41,7 @@ public class LocalUseCases implements ILocalUseCases {
     return id;
   }
 
-  @Override
-  public LocalDomain updateLocal(UpdateLocalDTO user) throws LocalNaoExiste {
+  public LocalDomain updateLocal(RequestLocalDTO user) throws LocalNaoExiste {
     Optional<LocalDomain> localDomain = localRepository.findById(user.localID());
 
     if (localDomain.isPresent()) {
@@ -66,19 +61,15 @@ public class LocalUseCases implements ILocalUseCases {
     return localDomain.get();
   }
 
-  @Override
-  public ResponseLocalDTO findById(String id) throws LocalNaoExiste {
+  public LocalDomain  findById(String id) throws LocalNaoExiste {
     Optional<LocalDomain> localDomain = localRepository.findById(id);
     if (localDomain.isEmpty()) {
       throw new LocalNaoExiste("Local nao existe.");
     }
-    return new ResponseLocalDTO(localDomain.get());
+    return localDomain.get();
   }
 
-  @Override
-  public List<ResponseLocalDTO> findAll() {
-    Iterable<LocalDomain> localIterable = localRepository.findAll();
-
-    return StreamSupport.stream(localIterable.spliterator(), true).map(ResponseLocalDTO::new).collect(Collectors.toList());
+  public List<LocalDomain> findAll() {
+    return StreamSupport.stream(localRepository.findAll().spliterator(), true).collect(Collectors.toList());
   }
 }

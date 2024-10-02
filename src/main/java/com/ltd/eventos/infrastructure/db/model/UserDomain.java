@@ -1,15 +1,19 @@
-package com.ltd.eventos.infrastructure.db.entities;
+package com.ltd.eventos.infrastructure.db.model;
 
+import com.ltd.eventos.adapter.DTO.UserDTO.UpdateUserDTO;
 import com.ltd.eventos.domain.entities.UserBusinessRules;
 import com.ltd.eventos.shared.UserType;
-import com.ltd.eventos.usecases.DTO.UserDTO.UpdateUserDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
+
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 // Lombok
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 
 // Spring JPA
@@ -48,5 +52,21 @@ public class UserDomain {
     public UserDomain(UpdateUserDTO user) {
         this.username = user.username();
         this.senha = user.senha();
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        UserDomain that = (UserDomain) o;
+        return getUser_id() != null && Objects.equals(getUser_id(), that.getUser_id());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

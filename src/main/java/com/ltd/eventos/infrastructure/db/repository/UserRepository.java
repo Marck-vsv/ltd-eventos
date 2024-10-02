@@ -1,6 +1,6 @@
 package com.ltd.eventos.infrastructure.db.repository;
 
-import com.ltd.eventos.infrastructure.db.entities.UserDomain;
+import com.ltd.eventos.infrastructure.db.model.UserDomain;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

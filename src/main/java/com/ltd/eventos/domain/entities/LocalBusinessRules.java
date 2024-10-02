@@ -1,11 +1,13 @@
 package com.ltd.eventos.domain.entities;
 
+import com.ltd.eventos.adapter.DTO.LocalDTO.RequestLocalDTO;
+import com.ltd.eventos.infrastructure.db.model.LocalDomain;
 import com.ltd.eventos.shared.LocalType;
-import com.ltd.eventos.usecases.DTO.LocalDTO.CreateLocalDTO;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@SuppressWarnings({"LombokGetterMayBeUsed"})
 public class LocalBusinessRules {
   private final UUID local_id;
   private final Integer local_capacidade;
@@ -21,11 +23,19 @@ public class LocalBusinessRules {
     this.created_at = created_at;
   }
 
-  public LocalBusinessRules(CreateLocalDTO createLocalDTO) {
+    public LocalBusinessRules(LocalDomain localDomain) {
+    this.local_id = UUID.fromString(localDomain.getLocal_id()) ;
+    this.local_capacidade = localDomain.getLocal_capacidade();
+    this.local_tipo = localDomain.getLocal_tipo();
+    this.local_endereco = localDomain.getLocal_endereco();
+    this.created_at = localDomain.getCreated_at();
+  }
+
+  public LocalBusinessRules(RequestLocalDTO requestLocalDTO) {
     this.local_id = UUID.randomUUID();
-    this.local_capacidade = createLocalDTO.localCapacidade();
-    this.local_tipo = createLocalDTO.localTipo();
-    this.local_endereco = createLocalDTO.localEndereco();
+    this.local_capacidade = requestLocalDTO.localCapacidade();
+    this.local_tipo = requestLocalDTO.localTipo();
+    this.local_endereco = requestLocalDTO.localEndereco();
     this.created_at = LocalDateTime.now();
   }
 

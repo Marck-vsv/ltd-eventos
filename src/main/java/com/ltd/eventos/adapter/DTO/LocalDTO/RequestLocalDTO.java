@@ -1,8 +1,9 @@
-package com.ltd.eventos.usecases.DTO.LocalDTO;
+package com.ltd.eventos.adapter.DTO.LocalDTO;
 
 import com.ltd.eventos.shared.LocalType;
 
-public record CreateLocalDTO(
+public record RequestLocalDTO(
+    String localID,
     Integer localCapacidade,
     LocalType localTipo,
     String localEndereco
