@@ -1,16 +1,16 @@
 package com.ltd.eventos.adapter.controller;
 
-import com.ltd.eventos.usecases.DTO.LocalDTO.CreateLocalDTO;
-import com.ltd.eventos.usecases.DTO.LocalDTO.ResponseLocalDTO;
-import com.ltd.eventos.usecases.DTO.LocalDTO.UpdateLocalDTO;
+import com.ltd.eventos.adapter.DTO.LocalDTO.ResponseLocalDTO;
+import com.ltd.eventos.adapter.DTO.LocalDTO.RequestLocalDTO;
 import com.ltd.eventos.usecases.exceptions.LocalNaoExiste;
-import com.ltd.eventos.usecases.interactor.local.LocalUseCases;
+import com.ltd.eventos.usecases.interactor.LocalUseCases;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/local")
@@ -23,18 +23,18 @@ public class LocalController {
   }
 
   @PostMapping("/create")
-  public ResponseEntity<?> createLocal(@RequestBody CreateLocalDTO local) {
+  public ResponseEntity<?> createLocal(@RequestBody RequestLocalDTO local) {
     try {
-      return ResponseEntity.ok(localUseCases.createLocal(local));
+      return ResponseEntity.ok(new ResponseLocalDTO(localUseCases.createLocal(local)));
     } catch (RuntimeException e) {
       return ResponseEntity.internalServerError().body(e.getMessage());
     }
   }
 
   @PatchMapping("/update")
-  public ResponseEntity<?> updateLocal(@RequestBody UpdateLocalDTO local) {
+  public ResponseEntity<?> updateLocal(@RequestBody RequestLocalDTO local) {
     try {
-          return ResponseEntity.ok(new ResponseLocalDTO(localUseCases.updateLocal(local)));
+      return ResponseEntity.ok(new ResponseLocalDTO(localUseCases.updateLocal(local)));
     } catch (LocalNaoExiste e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
@@ -52,14 +52,14 @@ public class LocalController {
   @GetMapping("/findbyid/{id}")
   public ResponseEntity<?> FindById(@PathVariable String id) {
     try {
-          return ResponseEntity.ok(localUseCases.findById(id));
+      return ResponseEntity.ok(new ResponseLocalDTO(localUseCases.findById(id)));
     } catch (LocalNaoExiste e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
   }
 
   @GetMapping("/findall")
   public ResponseEntity<List<ResponseLocalDTO>> findAllLocal() {
-    return ResponseEntity.ok(localUseCases.findAll());
+    return ResponseEntity.ok(localUseCases.findAll().stream().map(ResponseLocalDTO::new).collect(Collectors.toList()));
   }
 }

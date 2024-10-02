@@ -1,11 +1,12 @@
 package com.ltd.eventos.domain.entities;
 
 import com.ltd.eventos.shared.UserType;
-import com.ltd.eventos.usecases.DTO.UserDTO.CreateUserDTO;
+import com.ltd.eventos.adapter.DTO.UserDTO.RequestUserDTO;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@SuppressWarnings({"LombokGetterMayBeUsed"})
 public class UserBusinessRules {
   private final UUID user_id;
   private final String username;
@@ -23,7 +24,7 @@ public class UserBusinessRules {
     this.created_at = created_at;
   }
 
-    public UserBusinessRules(CreateUserDTO userDTO) {
+    public UserBusinessRules(RequestUserDTO userDTO) {
     this.user_id = UUID.randomUUID();
     this.username = userDTO.username();
     this.matricula = userDTO.matricula();

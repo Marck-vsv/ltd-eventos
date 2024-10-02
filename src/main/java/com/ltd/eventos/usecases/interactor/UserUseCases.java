@@ -1,11 +1,11 @@
-package com.ltd.eventos.usecases.interactor.user;
+package com.ltd.eventos.usecases.interactor;
 
 import com.ltd.eventos.domain.entities.UserBusinessRules;
-import com.ltd.eventos.infrastructure.db.entities.UserDomain;
+import com.ltd.eventos.infrastructure.db.model.UserDomain;
 import com.ltd.eventos.infrastructure.db.repository.UserRepository;
-import com.ltd.eventos.usecases.DTO.UserDTO.CreateUserDTO;
-import com.ltd.eventos.usecases.DTO.UserDTO.ResponseUserDTO;
-import com.ltd.eventos.usecases.DTO.UserDTO.UpdateUserDTO;
+import com.ltd.eventos.adapter.DTO.UserDTO.RequestUserDTO;
+import com.ltd.eventos.adapter.DTO.UserDTO.ResponseUserDTO;
+import com.ltd.eventos.adapter.DTO.UserDTO.UpdateUserDTO;
 import com.ltd.eventos.usecases.exceptions.UsuarioNaoExiste;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class UserUseCases implements IUserUseCases {
+public class UserUseCases {
   private final UserRepository userRepository;
 
   @Autowired
@@ -26,9 +26,8 @@ public class UserUseCases implements IUserUseCases {
     this.userRepository = userRepository;
   }
 
-  @Override
   @Transactional
-  public UserDomain createUser(CreateUserDTO user) throws RuntimeException {
+  public UserDomain createUser(RequestUserDTO user) throws RuntimeException {
     UserDomain userDomain = new UserDomain(new UserBusinessRules(user));
     try {
       userRepository.save(userDomain);
@@ -38,7 +37,6 @@ public class UserUseCases implements IUserUseCases {
     return userDomain;
   }
 
-  @Override
   @Transactional
   public String deleteUser(String id) throws UsuarioNaoExiste {
     if (userRepository.existsById(id)) {
@@ -49,7 +47,6 @@ public class UserUseCases implements IUserUseCases {
     return id;
   }
 
-  @Override
   @Transactional
   public Optional<UserDomain> updateUser(UpdateUserDTO user) throws UsuarioNaoExiste, IllegalArgumentException {
     if (user.username() == null) {
@@ -73,26 +70,15 @@ public class UserUseCases implements IUserUseCases {
     return userDomain;
   }
 
-  @Override
-  public Optional<ResponseUserDTO> findByMatricula(String matricula) throws UsuarioNaoExiste {
+  public Optional<UserDomain> findByMatricula(String matricula) throws UsuarioNaoExiste {
     Optional<UserDomain> user = Optional.ofNullable(userRepository.findByMatricula(matricula));
     if (user.isEmpty()) {
       throw new UsuarioNaoExiste("Usuário não existe no banco de dados.");
     }
-    return Optional.of(new ResponseUserDTO(
-        user.get().getUsername(),
-        user.get().getMatricula(),
-        user.get().getUser_type(),
-        user.get().getCreated_at(),
-        user.get().getUpdated_at(),
-        user.get().getEvento_evento_id()
-    ));
+    return user;
   }
 
-  @Override
   public List<ResponseUserDTO> findAll() {
-    Iterable<UserDomain> usersIterable = userRepository.findAll();
-
-    return StreamSupport.stream(usersIterable.spliterator(), true).map(ResponseUserDTO::new).collect(Collectors.toList());
+    return StreamSupport.stream(userRepository.findAll().spliterator(), true).map(ResponseUserDTO::new).collect(Collectors.toList());
   }
 }
