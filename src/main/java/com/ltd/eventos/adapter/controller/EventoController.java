@@ -1,8 +1,8 @@
 package com.ltd.eventos.adapter.controller;
 
-import com.ltd.eventos.adapter.DTO.eventoDTO.CreateEventoDTO;
-import com.ltd.eventos.adapter.DTO.eventoDTO.ResponseEventoDTO;
-import com.ltd.eventos.adapter.DTO.eventoDTO.UpdateEventoDTO;
+import com.ltd.eventos.adapter.dto.eventodto.CreateEventoDTO;
+import com.ltd.eventos.adapter.dto.eventodto.ResponseEventoDTO;
+import com.ltd.eventos.adapter.dto.eventodto.UpdateEventoDTO;
 import com.ltd.eventos.usecases.exceptions.EventoNaoExiste;
 import com.ltd.eventos.usecases.exceptions.LocalNaoExiste;
 import com.ltd.eventos.usecases.interactor.EventoUseCases;
@@ -40,9 +40,7 @@ public class EventoController {
   public ResponseEntity<?> updateEvento(@RequestBody UpdateEventoDTO updateEventoDTO) {
     try {
       return ResponseEntity.ok(new ResponseEventoDTO(eventoUseCases.updateEvento(updateEventoDTO)));
-    } catch (LocalNaoExiste e) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro no processamento da requisicao: " + e.getMessage());
-    } catch (EventoNaoExiste e) {
+    } catch (LocalNaoExiste | EventoNaoExiste e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro no processamento da requisicao: " + e.getMessage());
     }
   }

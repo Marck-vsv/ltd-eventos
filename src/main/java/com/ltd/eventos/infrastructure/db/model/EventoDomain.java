@@ -37,26 +37,19 @@ public class EventoDomain {
   @OneToOne
   @JoinColumn(name = "local_local_id", nullable = false, columnDefinition = "VARCHAR(36)")
   private LocalDomain local_local_id;
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private UserDomain user_id;
 
   public EventoDomain(EventoBusinessRules eventosBusinessRules, LocalDomain localDomain) {
-    this.evento_id = eventosBusinessRules.getEvento_id();
-    this.evento_nome = eventosBusinessRules.getEvento_nome();
-    this.evento_desc = eventosBusinessRules.getEvento_desc();
-    this.evento_capacidade = eventosBusinessRules.getEvento_capacidade();
-    this.evento_inicio = eventosBusinessRules.getEvento_inicio();
-    this.evento_fim = eventosBusinessRules.getEvento_fim();
-    this.created_at = eventosBusinessRules.getCreated_at();
+    this.evento_id = eventosBusinessRules.evento_id();
+    this.evento_nome = eventosBusinessRules.evento_nome();
+    this.evento_desc = eventosBusinessRules.evento_desc();
+    this.evento_capacidade = eventosBusinessRules.evento_capacidade();
+    this.evento_inicio = eventosBusinessRules.evento_inicio();
+    this.evento_fim = eventosBusinessRules.evento_fim();
+    this.created_at = eventosBusinessRules.created_at();
     this.local_local_id = localDomain;
-  }
-
-    public EventoDomain(EventoBusinessRules eventosBusinessRules) {
-    this.evento_id = eventosBusinessRules.getEvento_id();
-    this.evento_nome = eventosBusinessRules.getEvento_nome();
-    this.evento_desc = eventosBusinessRules.getEvento_desc();
-    this.evento_capacidade = eventosBusinessRules.getEvento_capacidade();
-    this.evento_inicio = eventosBusinessRules.getEvento_inicio();
-    this.evento_fim = eventosBusinessRules.getEvento_fim();
-    this.created_at = eventosBusinessRules.getCreated_at();
   }
 
   @Override

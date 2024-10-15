@@ -1,11 +1,11 @@
 package com.ltd.eventos.usecases.interactor;
 
-import com.ltd.eventos.adapter.DTO.eventoDTO.UpdateEventoDTO;
+import com.ltd.eventos.adapter.dto.eventodto.UpdateEventoDTO;
 import com.ltd.eventos.domain.entities.EventoBusinessRules;
 import com.ltd.eventos.infrastructure.db.model.EventoDomain;
 import com.ltd.eventos.infrastructure.db.model.LocalDomain;
 import com.ltd.eventos.infrastructure.db.repository.EventoRepository;
-import com.ltd.eventos.adapter.DTO.eventoDTO.CreateEventoDTO;
+import com.ltd.eventos.adapter.dto.eventodto.CreateEventoDTO;
 import com.ltd.eventos.usecases.exceptions.EventoNaoExiste;
 import com.ltd.eventos.usecases.exceptions.LocalNaoExiste;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.ltd.eventos.adapter.DTO.UserDTO;
+package com.ltd.eventos.adapter.dto.userdto;
 
 public record UpdateUserDTO
     (String username,

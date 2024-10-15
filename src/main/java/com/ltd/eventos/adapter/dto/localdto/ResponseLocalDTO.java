@@ -1,4 +1,4 @@
-package com.ltd.eventos.adapter.DTO.LocalDTO;
+package com.ltd.eventos.adapter.dto.localdto;
 
 import com.ltd.eventos.infrastructure.db.model.LocalDomain;
 import com.ltd.eventos.shared.LocalType;
