@@ -1,7 +1,7 @@
 package com.ltd.eventos.adapter.controller;
 
-import com.ltd.eventos.adapter.DTO.LocalDTO.ResponseLocalDTO;
-import com.ltd.eventos.adapter.DTO.LocalDTO.RequestLocalDTO;
+import com.ltd.eventos.adapter.dto.localdto.ResponseLocalDTO;
+import com.ltd.eventos.adapter.dto.localdto.RequestLocalDTO;
 import com.ltd.eventos.usecases.exceptions.LocalNaoExiste;
 import com.ltd.eventos.usecases.interactor.LocalUseCases;
 import org.springframework.beans.factory.annotation.Autowired;

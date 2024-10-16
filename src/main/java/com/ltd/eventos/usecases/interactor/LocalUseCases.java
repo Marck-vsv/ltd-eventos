@@ -3,7 +3,7 @@ package com.ltd.eventos.usecases.interactor;
 import com.ltd.eventos.domain.entities.LocalBusinessRules;
 import com.ltd.eventos.infrastructure.db.model.LocalDomain;
 import com.ltd.eventos.infrastructure.db.repository.LocalRepository;
-import com.ltd.eventos.adapter.DTO.LocalDTO.RequestLocalDTO;
+import com.ltd.eventos.adapter.dto.localdto.RequestLocalDTO;
 import com.ltd.eventos.usecases.exceptions.LocalNaoExiste;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,8 @@
 package com.ltd.eventos.adapter.controller;
 
-import com.ltd.eventos.adapter.DTO.UserDTO.RequestUserDTO;
-import com.ltd.eventos.adapter.DTO.UserDTO.ResponseUserDTO;
-import com.ltd.eventos.adapter.DTO.UserDTO.UpdateUserDTO;
+import com.ltd.eventos.adapter.dto.userdto.RequestUserDTO;
+import com.ltd.eventos.adapter.dto.userdto.ResponseUserDTO;
+import com.ltd.eventos.adapter.dto.userdto.UpdateUserDTO;
 import com.ltd.eventos.usecases.exceptions.UsuarioNaoExiste;
 import com.ltd.eventos.usecases.interactor.UserUseCases;
 import org.springframework.beans.factory.annotation.Autowired;
